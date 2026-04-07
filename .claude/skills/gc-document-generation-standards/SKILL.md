@@ -1029,6 +1029,92 @@ A: 設計判定の根拠がループしている可能性。dependencies では�
 
 ---
 
-**最終更新:** 2026-04-06
+---
+
+## 11. Officeファイル出力規約（v3.6追加）
+
+### 11.1 基本方針
+
+エージェントは**MDで内容を生成する**。形式変換はスクリプトが担当。エージェントは変換を意識しない。
+
+### 11.2 成果物フォーマット定義
+
+| 成果物 | 一次生成（MD） | 納品形式 | 変換スクリプト |
+|-------|-------------|---------|--------------|
+| 見積書（内部用） | ✅ .md | .md | 変換不要 |
+| 見積書（顧客提出用） | ✅ .md | .xlsx | `scripts/generate_xlsx.py` |
+| WBS | ✅ .md | .xlsx | `scripts/generate_xlsx.py` |
+| 課題管理票 | ✅ .md | .xlsx | `scripts/generate_xlsx.py` |
+| 提案書 | ✅ .md | .pdf / .pptx | `scripts/generate_pdf.sh` / `scripts/generate_pptx.py` |
+| フェーズゲート報告書 | ✅ .md | .pptx | `scripts/generate_pptx.py` |
+| 進捗報告 | ✅ .md | .pptx | `scripts/generate_pptx.py` |
+| 各種設計書（内部用） | ✅ .md | .md | 変換不要 |
+| 各種設計書（納品物） | ✅ .md | .pdf / .docx | `scripts/generate_pdf.sh` / `scripts/generate_docx.sh` |
+| 運用手順書 | ✅ .md | .docx | `scripts/generate_docx.sh` |
+| 議事録 | ✅ .md | .md | 変換不要 |
+| IaCコード | ✅ .tf/.yaml | そのまま | 変換不要 |
+
+### 11.3 変換スクリプト一覧
+
+```
+scripts/
+  generate_xlsx.py   # WBS・見積書・課題管理票 → xlsx（openpyxl使用）
+  generate_pptx.py   # 提案書・報告書・進捗報告 → pptx（python-pptx使用）
+  generate_pdf.sh    # MD → PDF（pandoc使用）
+  generate_docx.sh   # MD → docx（pandoc使用）
+```
+
+**依存ライブラリ:**
+```
+openpyxl>=3.1.0      # xlsx生成
+python-pptx>=0.6.21  # pptx生成
+pandoc               # pdf/docx変換（要インストール）
+```
+
+### 11.4 変換実行タイミング
+
+| タイミング | 実行方法 |
+|----------|---------|
+| フェーズゲート承認時 | オーケストレーターが確認後、対象スクリプトを一括実行 |
+| 手動指示時 | ユーザーが「提案書をPDFにして」等と指示 |
+
+**実行手順（オーケストレーター向け）:**
+```
+フェーズゲート承認を検知
+  ↓
+「以下の納品物を変換しますか？（Y/N）」とユーザーに確認
+  ↓
+Y → scripts/ の変換スクリプトを順次実行（Bashツール経由）
+  ↓
+変換済みファイルのパスを一覧表示
+```
+
+### 11.5 xlsx生成仕様（generate_xlsx.py）
+
+MDのテーブルをxlsxに変換する。ヘッダー行は太字・背景色付き。
+
+```python
+# 呼び出し例
+python scripts/generate_xlsx.py \
+  --input outputs/01_提案見積/01-1_見積書/見積書.md \
+  --output outputs/01_提案見積/01-1_見積書/見積書.xlsx \
+  --sheet "工数見積"
+```
+
+### 11.6 pptx生成仕様（generate_pptx.py）
+
+MDの見出し（#）をスライドタイトル、本文をコンテンツとして変換する。
+
+```python
+# 呼び出し例
+python scripts/generate_pptx.py \
+  --input outputs/01_提案見積/01-2_提案書/技術提案書.md \
+  --output outputs/01_提案見積/01-2_提案書/技術提案書.pptx \
+  --template scripts/templates/gc_proposal_template.pptx
+```
+
+---
+
+**最終更新:** 2026-04-08
 **スキル管理者:** @orchestrator
-**バージョン:** 1.0
+**バージョン:** 1.1（v3.6: Officeファイル出力規約追加）
