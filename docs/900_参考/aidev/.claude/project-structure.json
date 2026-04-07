@@ -1,0 +1,59 @@
+{
+  "version": "1.0.0",
+  "description": "aiDev プロジェクト構造定義",
+  "detected_at": "2025-12-28T00:00:00Z",
+  "pm_policy": {
+    "allow_write": [
+      "docs/02_要件定義/**",
+      ".claude-state/**"
+    ],
+    "deny_write": [
+      "src/**",
+      "infra/**",
+      "tests/**",
+      "docs/03_アプリケーション設計/**",
+      "docs/04_インフラ設計/**",
+      "docs/05_テスト/**",
+      ".claude/docs/40_standards/**"
+    ],
+    "labels": {
+      "src/**": "Coder",
+      "infra/**": "SRE",
+      "tests/**": "QA",
+      "docs/03_アプリケーション設計/**": "App-Architect",
+      "docs/04_インフラ設計/**": "Infra-Architect",
+      "docs/05_テスト/**": "QA",
+      ".claude/docs/40_standards/**": "サブエージェント専用"
+    }
+  },
+  "agent_responsibilities": {
+    "pm": {
+      "write": ["docs/02_要件定義/**", ".claude-state/**"],
+      "read": ["docs/**", ".claude/docs/00_core-principles.md", ".claude/docs/10_facilitation/**"]
+    },
+    "app-architect": {
+      "write": ["docs/03_アプリケーション設計/**"],
+      "read": ["docs/02_要件定義/**", ".claude/docs/40_standards/**"]
+    },
+    "infra-architect": {
+      "write": ["docs/04_インフラ設計/**"],
+      "read": ["docs/02_要件定義/**", ".claude/docs/40_standards/**"]
+    },
+    "coder": {
+      "write": ["src/**", "prototypes/**"],
+      "read": ["docs/03_アプリケーション設計/**", ".claude/docs/40_standards/**"]
+    },
+    "sre": {
+      "write": ["infra/**"],
+      "read": ["docs/04_インフラ設計/**", ".claude/docs/40_standards/**"]
+    },
+    "qa": {
+      "write": ["tests/**", "docs/05_テスト/**"],
+      "read": ["docs/**", ".claude/docs/40_standards/**"]
+    },
+    "designer": {
+      "write": ["docs/03_アプリケーション設計/03_画面設計/**", "prototypes/**"],
+      "read": ["docs/02_要件定義/**", "docs/03_アプリケーション設計/**"]
+    }
+  }
+}

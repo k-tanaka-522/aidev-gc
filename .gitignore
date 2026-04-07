@@ -1,0 +1,46 @@
+# 環境変数・シークレット
+.env
+.env.*
+*.pem
+*.key
+secrets/
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# エディタ
+.vscode/settings.json
+.idea/
+*.swp
+*.swo
+
+# Google Docs連携
+*.gdoc
+*.gsheet
+*.gslides
+
+# Office一時ファイル
+~$*.docx
+~$*.xlsx
+~$*.pptx
+
+# Node
+node_modules/
+npm-debug.log
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+.terraform.lock.hcl
+
+# ログ
+*.log

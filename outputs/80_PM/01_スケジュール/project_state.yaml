@@ -1,0 +1,17 @@
+project: ""
+customer: ""
+
+current_phase: "Phase 0"
+phase_entry_date: ""
+completed_phases: []
+
+last_session:
+  date: ""
+  milestone: ""
+  active_agents: []
+
+next_action: ""
+
+open_qa_count: 0
+open_issue_count: 0
+assumption_pending_count: 0

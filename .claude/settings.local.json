@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l /c/Users/gmk/Documents/claude/aidev-gc/docs/000_企画/*.md)",
+      "Bash(gh repo:*)",
+      "Bash(gh api:*)",
+      "Bash(git init:*)",
+      "Bash(git remote:*)",
+      "Bash(git add:*)"
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "permissions": {
+    "allow": [
+      "Write(*.md)",
+      "Edit(*.md)",
+      "Write(.claude/**)",
+      "Edit(.claude/**)"
+    ]
+  },
+  "hooks": {
+    "SubagentStop": [
+      {
+        "matcher": "infra-network|infra-security|infra-monitoring|infra-iac|infra-gc-environment|infra-backup-dr|infra-cost",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo '設計エージェント完了。@infra-gap-detector で抜け漏れチェックを推奨します。'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash /sessions/adoring-busy-hopper/mnt/aidev-gc/.claude/hooks/iac-validate.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
