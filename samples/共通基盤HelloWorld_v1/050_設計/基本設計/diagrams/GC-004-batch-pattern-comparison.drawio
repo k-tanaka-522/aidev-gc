@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="gc004_pattern_cmp" name="Batch-Pattern-Comparison">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- 共通トリガ source -->
+        <mxCell id="src" value="トリガ元&#10;(EventBridge スケジュール /&#10;オンラインFargate からの起動 /&#10;S3イベント)" style="rounded=1;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#1565C0;fillColor=#E3F2FD;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="40" width="200" height="90" as="geometry"/>
+        </mxCell>
+
+        <!-- ===================== Pattern A: Lambda ===================== -->
+        <mxCell id="grpA" value="パターンA: Lambda（軽量・イベント駆動）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=13;fontStyle=1;container=1;verticalAlign=top;align=left;spacingLeft=12;strokeColor=#2E7D32;fillColor=#E9F5EB;" vertex="1" parent="1">
+          <mxGeometry x="40" y="170" width="500" height="280" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_eb" value="EventBridge&#10;(スケジュール/イベント)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpA">
+          <mxGeometry x="20" y="50" width="110" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_lambda" value="Lambda 関数&#10;(Spring/Java or 軽量ランタイム)&#10;VPC Lambda(ENI)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpA">
+          <mxGeometry x="190" y="45" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_dlq" value="SQS DLQ&#10;(失敗イベント)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.simple_queue_service;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpA">
+          <mxGeometry x="190" y="170" width="120" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_logs" value="CloudWatch Logs&#10;/ Metrics" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpA">
+          <mxGeometry x="370" y="45" width="110" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="A_s3" value="S3 (CMK)&#10;成果物" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpA">
+          <mxGeometry x="370" y="170" width="110" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="eA1" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="A_eb" target="A_lambda" parent="grpA"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eA2" value="失敗時" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#DD344C;strokeWidth=1.5;dashed=1;endArrow=classic;" edge="1" source="A_lambda" target="A_dlq" parent="grpA"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eA3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=1.5;endArrow=classic;" edge="1" source="A_lambda" target="A_logs" parent="grpA"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eA4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#3F8624;strokeWidth=1.5;endArrow=classic;" edge="1" source="A_lambda" target="A_s3" parent="grpA"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- ===================== Pattern B: AWS Batch ===================== -->
+        <mxCell id="grpB" value="パターンB: AWS Batch（大規模・長時間バッチ）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=13;fontStyle=1;container=1;verticalAlign=top;align=left;spacingLeft=12;strokeColor=#E65100;fillColor=#FFF3E6;" vertex="1" parent="1">
+          <mxGeometry x="580" y="170" width="540" height="280" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_eb" value="EventBridge&#10;(起動トリガ)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpB">
+          <mxGeometry x="20" y="50" width="110" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_queue" value="Job Queue&#10;(ジョブキュー)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.batch;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpB">
+          <mxGeometry x="180" y="45" width="110" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_ce" value="Compute Environment&#10;(Fargate/EC2)&#10;Job Definition" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpB">
+          <mxGeometry x="340" y="45" width="160" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_ecr" value="ECR&#10;(ジョブイメージ)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_container_registry;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpB">
+          <mxGeometry x="180" y="180" width="110" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="B_logs" value="CloudWatch Logs&#10;/ Metrics" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpB">
+          <mxGeometry x="370" y="180" width="120" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="eB1" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="B_eb" target="B_queue" parent="grpB"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eB2" value="dispatch" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="B_queue" target="B_ce" parent="grpB"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eB3" value="pull" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=1.5;endArrow=classic;" edge="1" source="B_ecr" target="B_ce" parent="grpB"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eB4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=1.5;endArrow=classic;" edge="1" source="B_ce" target="B_logs" parent="grpB"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- ===================== Pattern C: SQS + ECS Fargate ===================== -->
+        <mxCell id="grpC" value="パターンC: SQS + ECS Fargate（非同期メッセージング・キュー深度連動スケール）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=13;fontStyle=1;container=1;verticalAlign=top;align=left;spacingLeft=12;strokeColor=#1565C0;fillColor=#E8F1FB;" vertex="1" parent="1">
+          <mxGeometry x="40" y="490" width="1080" height="300" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_prod" value="Producer&#10;(オンラインFargate /&#10;EventBridge)" style="rounded=1;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#1565C0;fillColor=#ffffff;" vertex="1" parent="grpC">
+          <mxGeometry x="20" y="60" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_sqs" value="SQS キュー&#10;(CMK暗号化)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.simple_queue_service;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpC">
+          <mxGeometry x="190" y="55" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_dlq" value="SQS DLQ" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.simple_queue_service;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpC">
+          <mxGeometry x="190" y="190" width="120" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_worker" value="ECS Fargate ワーカー&#10;(ECSサービス/タスク定義)&#10;SQSポーリング" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpC">
+          <mxGeometry x="370" y="55" width="170" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_asg" value="Application Auto Scaling&#10;(キュー深度 ApproximateNumberOfMessages 連動)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.application_auto_scaling2;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpC">
+          <mxGeometry x="370" y="185" width="220" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_ecr" value="ECR&#10;(ワーカーイメージ)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_container_registry;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpC">
+          <mxGeometry x="620" y="55" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_cwalarm" value="CloudWatch Alarm&#10;(キュー深度/エラー)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpC">
+          <mxGeometry x="790" y="55" width="140" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="C_s3" value="S3 (CMK)&#10;成果物" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.s3;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpC">
+          <mxGeometry x="790" y="185" width="140" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="eC1" value="send" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="C_prod" target="C_sqs" parent="grpC"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eC2" value="poll" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="C_sqs" target="C_worker" parent="grpC"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eC3" value="再配信超過" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#DD344C;strokeWidth=1.5;dashed=1;endArrow=classic;" edge="1" source="C_sqs" target="C_dlq" parent="grpC"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eC4" value="scale out/in" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#FF9900;strokeWidth=1.5;dashed=1;endArrow=classic;" edge="1" source="C_asg" target="C_worker" parent="grpC"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eC5" value="pull" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=1.5;endArrow=classic;" edge="1" source="C_ecr" target="C_worker" parent="grpC"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eC6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#3F8624;strokeWidth=1.5;endArrow=classic;" edge="1" source="C_worker" target="C_s3" parent="grpC"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- 共通トリガからの接続 -->
+        <mxCell id="eSA" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#888888;strokeWidth=1.5;endArrow=classic;dashed=1;" edge="1" source="src" target="grpA" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eSB" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#888888;strokeWidth=1.5;endArrow=classic;dashed=1;" edge="1" source="src" target="grpB" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="eSC" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#888888;strokeWidth=1.5;endArrow=classic;dashed=1;" edge="1" source="src" target="grpC" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- 共通基盤注記 -->
+        <mxCell id="note" value="共通: 全パターンともテナントVPCの Private Subnet - Batch/非同期 (10.20.20.0/24) に配置。&#10;IAMロール最小権限、KMS CMK暗号化、CloudWatch Logs、ConMon/CSPM(Config/SecurityHub/GuardDuty) 監視、タグ統制(compliance=ismap) を共通適用。&#10;VPC Endpoint(S3/ECR/Logs/SQS/Batch等) 経由でAWS APIへ閉域アクセス。自動適用層は上書きしない。" style="rounded=1;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#666666;fillColor=#F5F7FA;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="820" width="1080" height="110" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
