@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="sec001_posture" name="Security-Posture">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- タイトル -->
+        <mxCell id="title" value="SEC-001 セキュリティ構成図（IAM / KMS / 境界防御 / ConMon・CSPM / テナント境界）" style="text;html=1;fontSize=16;fontStyle=1;align=left;verticalAlign=middle;fontColor=#1B3A5C;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1000" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- ============ 自動適用層 Security Base (上書き禁止) ============ -->
+        <mxCell id="grpSB" value="Security OU ★GCAS自動適用層（上書き禁止 / Import・SSM参照のみ）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=13;fontStyle=1;container=1;verticalAlign=top;align=left;spacingLeft=12;strokeColor=#DD344C;fillColor=#FDEAEA;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="780" height="150" as="geometry"/>
+        </mxCell>
+        <mxCell id="sb_idc" value="IAM Identity Center&#10;(GCAS-SSO/CEP)&#10;break-glass" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.iam_identity_center;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpSB">
+          <mxGeometry x="20" y="50" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="sb_trail" value="CloudTrail (Org単位)&#10;Config Recorder&#10;Log Archive S3+Glacier" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudtrail;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpSB">
+          <mxGeometry x="180" y="50" width="140" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="sb_gd" value="GuardDuty / SecurityHub&#10;Delegated Admin&#10;(委任管理)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.guardduty;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpSB">
+          <mxGeometry x="360" y="50" width="150" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="sb_basekey" value="基盤KMSキー&#10;(ログ暗号化, 年1回回転)&#10;参照のみ" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpSB">
+          <mxGeometry x="540" y="50" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="sb_scp" value="SCP / Tag Policy&#10;(基本ガードレール)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.organizations;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpSB">
+          <mxGeometry x="680" y="50" width="90" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- ============ 境界防御 (エッジ) ============ -->
+        <mxCell id="grpEdge" value="境界防御（エッジ：住民向けパブリック経路）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=13;fontStyle=1;container=1;verticalAlign=top;align=left;spacingLeft=12;strokeColor=#1565C0;fillColor=#E3F2FD;" vertex="1" parent="1">
+          <mxGeometry x="40" y="250" width="430" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="user" value="住民/利用者" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.user;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpEdge">
+          <mxGeometry x="20" y="60" width="70" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="shield" value="Shield Standard&#10;(Advancedは本番時)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.shield;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#DD344C;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpEdge">
+          <mxGeometry x="110" y="50" width="90" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="cf" value="CloudFront&#10;(TLS1.2+/ACM)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudfront;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpEdge">
+          <mxGeometry x="210" y="50" width="90" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="waf" value="WAF Web ACL&#10;(OWASP/Rate/Geo)&#10;CloudFront+ALB二段" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.waf;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#DD344C;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpEdge">
+          <mxGeometry x="315" y="50" width="100" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- ============ テナントVPC (ゼロトラスト / SG・NACL / CMK) ============ -->
+        <mxCell id="vpcA" value="テナントA VPC (10.20.0.0/16, tag:tenant=A) — ゼロトラスト(Deny All) / KMSテナント別CMK" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#8C4FFF;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="460" width="780" height="450" as="geometry"/>
+        </mxCell>
+
+        <!-- Public Subnet -->
+        <mxCell id="subPub" value="Public Subnet (sg-public-alb: 443←CloudFront PL のみ)" style="points=[[0,0],[1,0],[1,1],[0,1]];outlineConnect=0;html=1;whiteSpace=wrap;fontSize=10;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet_public;strokeColor=#7AA116;fillColor=#E9F3E6;verticalAlign=top;align=left;spacingLeft=30;fontColor=#5C7A0F;dashed=0;" vertex="1" parent="vpcA">
+          <mxGeometry x="20" y="40" width="350" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="palb" value="公開ALB" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="subPub">
+          <mxGeometry x="140" y="25" width="80" height="55" as="geometry"/>
+        </mxCell>
+
+        <!-- Private-App Subnet -->
+        <mxCell id="subApp" value="Private-App (sg-fargate-app: ALB参照のみ In / Endpoint 443 Out)" style="points=[[0,0],[1,0],[1,1],[0,1]];outlineConnect=0;html=1;whiteSpace=wrap;fontSize=10;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet_private;strokeColor=#147EBA;fillColor=#EDF3F8;verticalAlign=top;align=left;spacingLeft=30;fontColor=#0E5A85;dashed=0;" vertex="1" parent="vpcA">
+          <mxGeometry x="20" y="150" width="350" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="fgpub" value="Fargate (public)&#10;ecsTaskRole-online" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="subApp">
+          <mxGeometry x="40" y="25" width="120" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="fgpriv" value="Fargate (private)&#10;内部ALB(庁内CIDR限定)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="subApp">
+          <mxGeometry x="200" y="25" width="120" height="55" as="geometry"/>
+        </mxCell>
+
+        <!-- Private-Batch Subnet (3 pattern) -->
+        <mxCell id="subBatch" value="Private-Batch (sg-batch-A/B/C: Inboundなし / Endpoint 443 Out)" style="points=[[0,0],[1,0],[1,1],[0,1]];outlineConnect=0;html=1;whiteSpace=wrap;fontSize=10;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet_private;strokeColor=#147EBA;fillColor=#EDF3F8;verticalAlign=top;align=left;spacingLeft=30;fontColor=#0E5A85;dashed=0;" vertex="1" parent="vpcA">
+          <mxGeometry x="20" y="260" width="350" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="pA" value="A: Lambda&#10;lambdaExecRole-A" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#2E7D32;fillColor=#ffffff;rounded=1;" vertex="1" parent="subBatch">
+          <mxGeometry x="20" y="30" width="95" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="pB" value="B: AWS Batch&#10;Service+JobRole" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.batch;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#C62828;fillColor=#ffffff;rounded=1;" vertex="1" parent="subBatch">
+          <mxGeometry x="128" y="30" width="95" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="pC" value="C: SQS+Fargate&#10;worker+ASRole" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#1565C0;fillColor=#ffffff;rounded=1;" vertex="1" parent="subBatch">
+          <mxGeometry x="236" y="30" width="95" height="55" as="geometry"/>
+        </mxCell>
+
+        <!-- Protected-Data Subnet (Endpoint + CMK) -->
+        <mxCell id="subData" value="Protected-Data (閉域/0.0.0.0/0なし) — VPC Endpoint(IF) + KMS Endpoint" style="points=[[0,0],[1,0],[1,1],[0,1]];outlineConnect=0;html=1;whiteSpace=wrap;fontSize=10;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet_private;strokeColor=#545B64;fillColor=#F5F5F5;verticalAlign=top;align=left;spacingLeft=30;fontColor=#3A3F45;dashed=0;" vertex="1" parent="vpcA">
+          <mxGeometry x="400" y="40" width="360" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="ep_kms" value="KMS Endpoint&#10;(sg-vpc-endpoint:443)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#DD344C;fillColor=#ffffff;rounded=1;" vertex="1" parent="subData">
+          <mxGeometry x="30" y="35" width="100" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="ep_other" value="ECR/Logs/SQS/Batch&#10;/STS/Monitoring EP" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.endpoints;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="subData">
+          <mxGeometry x="150" y="35" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="cmkA" value="テナントA CMK&#10;暗号化Context:tenant=A&#10;クロステナントDeny" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#DD344C;fillColor=#FDEAEA;rounded=1;" vertex="1" parent="subData">
+          <mxGeometry x="30" y="115" width="130" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="s3A" value="S3(CMK)/SQS(CMK)&#10;成果物・キュー" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.simple_storage_service;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#3F8624;fillColor=#ffffff;rounded=1;" vertex="1" parent="subData">
+          <mxGeometry x="180" y="115" width="120" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- ============ ConMon/CSPM (テナント側統制) ============ -->
+        <mxCell id="grpConMon" value="ConMon / CSPM（本設計：テナント側統制＋自動応答）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=13;fontStyle=1;container=1;verticalAlign=top;align=left;spacingLeft=12;strokeColor=#E7157B;fillColor=#FCE4F0;" vertex="1" parent="1">
+          <mxGeometry x="860" y="250" width="380" height="450" as="geometry"/>
+        </mxCell>
+        <mxCell id="cm_config" value="Config Rules&#10;(IAM/NW/Storage/Log/DB)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.config;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpConMon">
+          <mxGeometry x="30" y="45" width="150" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="cm_aa" value="IAM Access Analyzer&#10;(KMS/S3/Role週次)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.iam_access_analyzer;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpConMon">
+          <mxGeometry x="200" y="45" width="150" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="cm_sh" value="SecurityHub&#10;(FSBP/CIS+Suppression)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.security_hub;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpConMon">
+          <mxGeometry x="30" y="140" width="150" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="cm_gd" value="GuardDuty&#10;(Lambda/ECS/S3保護)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.guardduty;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpConMon">
+          <mxGeometry x="200" y="140" width="150" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="cm_eb" value="EventBridge&#10;(Severity>=7判定)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpConMon">
+          <mxGeometry x="30" y="240" width="150" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="cm_sns" value="SNS→セキュリティチーム&#10;SOAR(Slack)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.simple_notification_service;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpConMon">
+          <mxGeometry x="200" y="240" width="150" height="65" as="geometry"/>
+        </mxCell>
+        <mxCell id="cm_lambda" value="自動応答 Lambda&#10;(検証=手動是正/本番=承認後自動隔離)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpConMon">
+          <mxGeometry x="80" y="330" width="220" height="65" as="geometry"/>
+        </mxCell>
+
+        <!-- ============ プライベート経路 (庁内/職員) ============ -->
+        <mxCell id="grpLgwan" value="庁内・職員（プライベート閉域）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;verticalAlign=top;align=left;spacingLeft=12;strokeColor=#E65100;fillColor=#FFF3E0;" vertex="1" parent="1">
+          <mxGeometry x="860" y="730" width="380" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="staff" value="職員/庁内" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.user;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="grpLgwan">
+          <mxGeometry x="20" y="45" width="70" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="lgwan" value="LGWAN/LGCS→DX→TGW&#10;(MFA・庁内CIDR限定)" style="ellipse;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#E65100;fillColor=#FFE0B2;" vertex="1" parent="grpLgwan">
+          <mxGeometry x="120" y="40" width="200" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Edges: パブリック経路 ===== -->
+        <mxCell id="e_user_cf" value="HTTPS/TLS" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#1565C0;strokeWidth=2;endArrow=classic;" edge="1" source="user" target="cf" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_cf_waf" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#DD344C;strokeWidth=2;endArrow=classic;" edge="1" source="cf" target="waf" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_waf_palb" value="OAC/PL限定" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="waf" target="palb" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_palb_fg" value="SG参照(動的ポート)" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="palb" target="fgpub" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Edges: 閉域 Endpoint/KMS ===== -->
+        <mxCell id="e_fg_ep" value="443→Endpoint(閉域)" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=1;endArrow=classic;" edge="1" source="fgpub" target="ep_other" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_batch_ep" value="443→Endpoint" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=1;endArrow=classic;" edge="1" source="pC" target="ep_other" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_cmk_decrypt" value="kms:Decrypt(Context=A)" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#DD344C;strokeWidth=1.5;endArrow=classic;" edge="1" source="cmkA" target="s3A" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Edges: ConMon flow ===== -->
+        <mxCell id="e_gd_eb" value="Finding" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#FF6B35;strokeWidth=1.5;dashed=1;endArrow=classic;dashPattern=5 5;" edge="1" source="cm_gd" target="cm_eb" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_sh_eb" value="集約" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#FF6B35;strokeWidth=1.5;dashed=1;endArrow=classic;dashPattern=5 5;" edge="1" source="cm_sh" target="cm_eb" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_eb_sns" value="通知" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#FF6B35;strokeWidth=1.5;endArrow=classic;" edge="1" source="cm_eb" target="cm_sns" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_eb_lambda" value="是正" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#FF6B35;strokeWidth=1.5;endArrow=classic;" edge="1" source="cm_eb" target="cm_lambda" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Edges: SSO / 認証 ===== -->
+        <mxCell id="e_idc_vpc" value="AssumeRole(STS/MFA)&#10;Permission Boundary" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#8C4FFF;strokeWidth=2;dashed=1;endArrow=classic;" edge="1" source="sb_idc" target="vpcA" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== Edges: プライベート経路 ===== -->
+        <mxCell id="e_staff_lgwan" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#E65100;strokeWidth=2;endArrow=classic;" edge="1" source="staff" target="lgwan" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_lgwan_fg" value="閉域(庁内CIDR限定)" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#E65100;strokeWidth=2;endArrow=classic;" edge="1" source="lgwan" target="fgpriv" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+
+        <!-- 凡例 -->
+        <mxCell id="legend" value="凡例：赤破線=自動適用層(上書き禁止)／紫=ゼロトラストVPC／赤=暗号化(KMS CMK・テナント別)／橙破線=ConMon検出→自動応答／橙=LGWAN閉域&#10;DS-310: C-2/C-5 をIAM条件＋テナント別CMK＋SG/NACLの三層で担保。Security BaseはImport/SSM参照のみ。" style="text;html=1;fontSize=10;align=left;verticalAlign=top;fontColor=#333333;" vertex="1" parent="1">
+          <mxGeometry x="40" y="930" width="800" height="60" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
