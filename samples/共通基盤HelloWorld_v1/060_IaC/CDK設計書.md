@@ -1,7 +1,7 @@
 ---
 artifact_id: IaC-001
 title: CDK設計書（HelloWorld アーキ比較検証）
-version: 1.0
+version: 1.1
 status: draft
 author: "[infra-iac] (iac-implementation)"
 reviewer: ""
@@ -43,6 +43,7 @@ dependencies:
 | バージョン | 更新日 | 更新者 | 変更内容 | ステータス |
 |-----------|--------|--------|--------|----------|
 | 1.0 | 2026-06-01 | infra-iac | 初版作成。PARAM-001〜007 を入力に、全スタック・Construct 設計・デプロイ手順・自動適用層非上書き担保を記載 | draft |
+| 1.1 | 2026-06-01 | infra-iac | 検証指摘 C-1/H-1/H-2/M-1/M-2 対応: 付録 A にパターン固有アラームはインライン実装である旨を注記（M-1 対応） | draft |
 
 ---
 
@@ -377,7 +378,8 @@ main マージ → deploy dev（自動）→ deploy stg（自動）→ deploy pr
 │   │   ├── vpc-endpoints.ts            # VpcEndpointConstruct（PARAM-001 §9）
 │   │   ├── security-groups.ts          # HelloWorldSecurityGroupConstruct（PARAM-001 §10）
 │   │   ├── kms.ts                      # HelloWorldKmsConstruct（PARAM-003 §2）
-│   │   └── alarms.ts                   # HelloWorldAlarmConstruct（PARAM-004 §4）
+│   │   └── alarms.ts                   # HelloWorldAlarmConstruct（PARAM-004 §4 共通アラーム設定ファクトリ）
+│   │                                   # ※パターン固有アラーム（A: 4件/B: 2件/C: 5件）は各 pattern-x-xxx-stack.ts 内にインライン実装。alarms.ts は共通監視アラームのみ
 │   └── stacks/
 │       ├── security-stack.ts           # PARAM-003
 │       ├── network-stack.ts            # PARAM-001

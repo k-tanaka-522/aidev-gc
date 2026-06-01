@@ -1,7 +1,7 @@
 ---
 artifact_id: PARAM-007
 title: パターンC SQS+ECS Fargate詳細パラメーターシート
-version: 1.0
+version: 1.2
 status: draft
 author: "[infra-iac] (iac-implementation)"
 reviewer: ""
@@ -31,6 +31,7 @@ dependencies:
 | バージョン | 更新日 | 更新者 | 変更内容 | ステータス |
 |-----------|--------|--------|--------|----------|
 | 1.0 | 2026-06-01 | infra-iac | 初版作成。GC-002/NW-001/SEC-001 を入力に、パターン C SQS+ECS Fargate の CDK 実装入力レベルパラメーターを展開 | draft |
+| 1.2 | 2026-06-01 | infra-iac | 検証指摘 C-1/H-1/H-2/M-1/M-2 対応: §12 主要差分表の IAMロール数 C 列を 2 に修正（§8 本文の 2 ロールと整合）・固有アラーム数行追加 | draft |
 
 ---
 
@@ -274,5 +275,6 @@ dependencies:
 | Monitoring Endpoint 依存 | 低 | 低 | **高（キュー深度連動スケール）** |
 | Auto Scaling 方式 | CPU 率（ECS） | CE vCPU（Batch） | **キュー深度 TargetTracking** |
 | 常時稼働コスト | 最低（実行時のみ） | 中（CE 管理） | 中（最小ワーカー常時、GC-002 §6.3 制約） |
-| IAM ロール数（固有） | 1 | 3（ServiceRole/ExecutionRole/JobRole） | 3（ExecutionRole 共用、TaskRole/AutoScalingRole） |
+| IAM ロール数（固有） | 1 | 3（ServiceRole/ExecutionRole/JobRole） | **2**（TaskRole/AutoScalingRole、ecsTaskExecutionRole は共用） |
+| 固有アラーム数 | 4 | **2（実装）**※将来拡張: job-duration | **5** |
 | 設計複雑度（スケーリング） | 低 | 中 | **高（キュー深度連動の設計が肝）** |

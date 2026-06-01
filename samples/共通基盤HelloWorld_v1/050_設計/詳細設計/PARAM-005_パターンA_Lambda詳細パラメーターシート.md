@@ -1,7 +1,7 @@
 ---
 artifact_id: PARAM-005
 title: パターンA Lambda詳細パラメーターシート
-version: 1.0
+version: 1.1
 status: draft
 author: "[infra-iac] (iac-implementation)"
 reviewer: ""
@@ -31,6 +31,7 @@ dependencies:
 | バージョン | 更新日 | 更新者 | 変更内容 | ステータス |
 |-----------|--------|--------|--------|----------|
 | 1.0 | 2026-06-01 | infra-iac | 初版作成。GC-002/NW-001/SEC-001 を入力に、パターン A Lambda の CDK 実装入力レベルパラメーターを展開 | draft |
+| 1.1 | 2026-06-01 | infra-iac | 検証指摘 C-1/H-1/H-2/M-1/M-2 対応: §9 主要差分表の IAMロール数（B=3/C=2 に修正）・固有アラーム数行追加 | draft |
 
 ---
 
@@ -211,5 +212,6 @@ dependencies:
 | Batch Endpoint 要否 | 不要 | **必要** | 不要 |
 | SQS Endpoint 用途 | DLQ のみ | 任意 | **キュー主路** |
 | 常時稼働コスト | 実行時のみ（最小） | Fargate CE 管理リソース | 最小ワーカー常時 |
-| IAM ロール数 | 1 | 2（サービス/ジョブ分離） | 3（Exec/Task/AutoScale） |
+| IAM ロール数 | 1 | **3**（ServiceRole/ExecutionRole/JobRole） | 2（TaskRole/AutoScalingRole） |
+| 固有アラーム数 | **4** | 2（実装）※将来拡張: job-duration | **5** |
 | OS/AMI 責務 | なし（マネージド） | EC2 CE 時に発生 | なし（Fargate） |

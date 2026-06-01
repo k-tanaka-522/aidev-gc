@@ -1,7 +1,7 @@
 ---
 artifact_id: PARAM-006
 title: パターンB AWS Batch詳細パラメーターシート
-version: 1.0
+version: 1.1
 status: draft
 author: "[infra-iac] (iac-implementation)"
 reviewer: ""
@@ -31,6 +31,7 @@ dependencies:
 | バージョン | 更新日 | 更新者 | 変更内容 | ステータス |
 |-----------|--------|--------|--------|----------|
 | 1.0 | 2026-06-01 | infra-iac | 初版作成。GC-002/NW-001/SEC-001 を入力に、パターン B AWS Batch の CDK 実装入力レベルパラメーターを展開 | draft |
+| 1.1 | 2026-06-01 | infra-iac | 検証指摘 C-1/H-1/H-2/M-1/M-2 対応: §11 アラーム数を実装 2 に統一（job-duration は将来拡張として注記）・§12 固有リソース種別数を C=11（最多）に修正・固有アラーム数行追加・§10 S3 バケット定義参照注記追加 | draft |
 
 ---
 
@@ -220,16 +221,20 @@ dependencies:
 | タグ: compliance | `ismap` | |
 
 > S3 バケットはパターン A と共用（`pattern-B/` prefix で分離）し、重複作成しない。
+> S3 ライフサイクル設定・バージョニング詳細は **PARAM-005 §7 の共用バケット定義に従う**（M-2 対応）。
 
 ---
 
 ## 11. CloudWatch アラーム（パターン B 固有）
 
+> 実装アラーム数: **2**（helloworld-B-batch-job-failed / helloworld-B-batch-job-pending）。
+> `helloworld-B-batch-job-duration` は設計検討済みだが、カスタムメトリクス Publish 基盤（Lambda → CloudWatch）の追加実装が必要なため**将来拡張**とする（H-2 対応）。
+
 | アラーム名 | メトリクス / 条件 | アクション | 備考 |
 |---------|---------------|---------|------|
 | `helloworld-B-batch-job-failed` | Batch FailedJobCount >= 1 (1 期間, 5 分) | SNS 通知 | ジョブ失敗検知 |
 | `helloworld-B-batch-job-pending` | Batch PendingJobCount > 10 (1 期間, 10 分) | SNS 通知 | キュー積み残し検知 |
-| `helloworld-B-batch-job-duration` | (EventBridge: BatchJobStateChange SUCCEEDED, Duration > 3600s) | SNS 通知 | 長時間ジョブ検知（カスタムメトリクス） |
+| `helloworld-B-batch-job-duration` | (EventBridge: BatchJobStateChange SUCCEEDED, Duration > 3600s) | SNS 通知 | **将来拡張**: 長時間ジョブ検知（カスタムメトリクス）。現行実装には含まれない |
 
 ---
 
@@ -241,22 +246,25 @@ dependencies:
 | Job Queue | 1 | |
 | Job Definition | 1 | |
 | ECR リポジトリ（Batch 専用） | 1 | パターン A/C との差分 |
-| IAM ロール（Batch 固有） | 3（ServiceRole/ExecutionRole/JobRole） | パターン A=1 と比較し最多 |
+| IAM ロール（Batch 固有） | 3（ServiceRole/ExecutionRole/JobRole） | |
 | SG（sg-batch-B） | 1 | |
 | EventBridge ルール | 1 | |
 | CloudWatch Logs グループ | 1 | |
-| CloudWatch アラーム（固有） | 3 | |
+| CloudWatch アラーム（固有） | 2（実装）※将来拡張: job-duration | §11 注記参照 |
 
-**パターン B 固有リソース: 9 種（13 リソース）**
+**パターン B 固有リソース: 9 種（12 リソース）**
 
 ### 主要差分（他パターンとの比較）
 
 | 比較点 | パターン A | パターン B | パターン C |
 |-------|---------|---------|---------|
-| 固有リソース種別数 | 8 種 | **9 種（最多）** | 9 種 |
+| 固有リソース種別数 | 8 種 | 9 種 | **11 種（最多）** |
 | ECR Endpoint 要否 | 不要 | **必要** | **必要** |
 | Batch Endpoint 要否 | 不要 | **必要（固有）** | 不要 |
-| IAM ロール数 | 1 | **3** | 3 |
-| 設計・構築工数（相対） | 小 | **大** | 中 |
+| IAM ロール数 | 1 | **3**（ServiceRole/ExecutionRole/JobRole） | 2（TaskRole/AutoScalingRole） |
+| 固有アラーム数 | 4 | **2（実装）**※将来拡張: job-duration | 5 |
+| 設計・構築工数（相対） | 小 | **大（最多）** | 中 |
 | 常時コスト | 低（実行時のみ） | 中（CE 管理） | 中（最小ワーカー） |
 | OS パッチ責務 | なし | EC2 CE 時あり | なし |
+
+> 「最多」ラベルの整理: 固有リソース種別数は C=11 が最多、工数・実装難度は B が最大（Batch L1 実装・EC2 CE オプション対応）。
