@@ -28,6 +28,9 @@
 | Q-111 | 2026-06-01 | 庁内CIDR範囲（LGWAN/DX経路のルーティング・SG設計前提）は？ | @infra-network | 標準的なプライベートレンジを仮置き（owner: 運営主体NW担当） | 中 | 未回答（仮定で継続中） |
 | Q-112 | 2026-06-01 | DX回線の調達仕様（帯域1Gbps Private VIF・冗長）は？ | @infra-network | 1Gbps主＋VPNバックアップ構成を仮定（owner: infra-network） | 中 | 未回答（仮定で継続中） |
 | Q-113 | 2026-06-01 | バッチ処理の外部HTTPS通信有無（NAT GW要否に直結）は？ | @infra-network | 全パターン閉域完結（NAT不要）を基本と仮定（owner: infra-requirements） | 中 | 未回答（仮定で継続中） |
+| QA-IaC-001 | 2026-06-01 | S3 Gateway EndpointのRT ID受け渡し方式（vpcConstructからRT公開 or Endpoint内包）は？ | @infra-iac | privateRouteTableIds公開方式で実装 | 中 | 未回答（仮定で継続中） |
+| QA-IaC-002 | 2026-06-01 | WAF Regional ACLとALBの関連付け方式（OnlineStack→WafRegionalStackへALB ARN受け渡し）は？ | @infra-iac | ALB情報を渡す形で実装 | 中 | 未回答（仮定で継続中） |
+| QA-IaC-003 | 2026-06-01 | Batch Fargate executionRoleArnの設定箇所（CE側 or JobDefinition側）は？ | @infra-iac | JobDefinition側で設定 | 低 | 未回答（仮定で継続中） |
 
 > 補足: @infra-network のLGWAN仕様に関する不明点は既存 Q-103 / Q-004（LGWAN接続の帯域/冗長化/接続先）と同主旨のため新規採番せず相互参照で紐付け。
 

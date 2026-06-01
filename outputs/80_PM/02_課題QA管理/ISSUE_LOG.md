@@ -18,6 +18,8 @@
 | ISSUE-002 | 2026-06-01 | 要確認 | SCP制約による許可サービス/リージョンをPhase 4着手前に確認しデプロイ失敗を予防 | IaC設計／デプロイ可否 | Phase 4着手前に許可サービス/リージョンを確認 | @infra-iac | Phase 4着手前 | 中 | オープン |
 | ISSUE-GC-001 | 2026-06-01 | リスク | 自動適用層をCDKが上書きするリスク。CDKは必須適用＋任意層のみ・Import参照に限定する原則をPhase 4設計レビューで検証 ※ISSUE-001と関連 | IaC設計／GC環境テンプレート | CDKは必須適用＋任意層のみ・Import参照に限定する原則をPhase 4設計レビューで検証 | @infra-iac | Phase 4設計レビュー | 高 | オープン |
 | ISSUE-GC-002 | 2026-06-01 | 要確認 | アーキ比較評価軸（重み付け）未定義、本設計は定性比較に留まる。REQ-002で定量化 ※Q-001/A-001と関連 | 要件定義／アーキ比較表 | REQ-002で評価軸を定量化 | @infra-requirements | Phase 2 | 中 | オープン |
+| ISSUE-IaC-001 | 2026-06-01 | 要確認 | cdk-nag AwsSolutions-IAM4がLambda VPCExecutionRoleで発火する可能性。理由付きSuppressionの要否を検討 | IaC設計／cdk-nag検証 | 理由付きSuppression（managed policy使用妥当性）を検討・適用 | @infra-iac | Phase 4設計レビュー | 低 | オープン |
+| ISSUE-IaC-002 | 2026-06-01 | リスク | OnlineStack(L2 ecs.Cluster)とVPC(L1)の型混在。L2統一のリファクタ余地あり | IaC設計／CDKコード保守性 | L2統一によるリファクタを検討（Phase 4設計レビューで方針確定） | @infra-iac | Phase 4設計レビュー | 低 | オープン |
 
 ---
 

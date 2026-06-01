@@ -35,6 +35,9 @@
 | A-108 | 2026-06-01 | WAFは標準マネージドルール＋レート制限を基本とし、ジオブロック等のしきい値は仮置き | Q-108 | @infra-security | セキュリティ設計書／WAF設計 |
 | A-109 | 2026-06-01 | MFAの一般ユーザー必須化は段階導入を仮定（特権ユーザー先行、一般は時期未定） | Q-109 | @infra-security | セキュリティ設計書／IAM・認証方針 |
 | A-110 | 2026-06-01 | GuardDuty検出時は通知中心＋限定的自動応答を仮定（広範な自動隔離は対象外） | Q-110 | @infra-security | セキュリティ設計書／インシデント自動対応方針 |
+| A-IaC-001 | 2026-06-01 | S3 Gateway EndpointのRT ID受け渡しはvpcConstructからprivateRouteTableIdsを公開する方式で実装 | QA-IaC-001 | @infra-iac | CDKコード（VpcConstruct／Endpoint定義） |
+| A-IaC-002 | 2026-06-01 | WAF Regional ACLとALBの関連付けはOnlineStackからWafRegionalStackへALB ARN情報を渡す形で実装 | QA-IaC-002 | @infra-iac | CDKコード（OnlineStack／WafRegionalStack） |
+| A-IaC-003 | 2026-06-01 | Batch Fargate executionRoleArnはJobDefinition側で設定 | QA-IaC-003 | @infra-iac | CDKコード（Batch JobDefinition定義） |
 
 ---
 
