@@ -28,6 +28,9 @@
 | A-102 | 2026-06-01 | バッチ/非同期は軽量5分毎・日次バッチ・非同期バースト等を仮定（Q-002と同主旨／相互参照） | Q-102, Q-002 | @infra-gc-environment, @infra-requirements | GC環境設計／ワークロード定義 |
 | A-103 | 2026-06-01 | LGWAN接続は接続前提のみとし、帯域/冗長化/接続先はNW設計で仮定義（Q-004と同主旨／相互参照） | Q-103, Q-004 | @infra-gc-environment, @infra-network | GC環境設計／ネットワーク設計書 |
 | A-104 | 2026-06-01 | KMSキーはテナント別キーを推奨し、最終方針はSEC設計で確定 | Q-104 | @infra-gc-environment, @infra-security | GC環境設計／セキュリティ設計書 |
+| A-111 | 2026-06-01 | 庁内CIDR範囲は標準的なプライベートレンジを仮置きし、LGWAN/DX経路のルーティング・SG設計前提とする | Q-111 | @infra-network | ネットワーク設計書／ルーティング・SG設計 |
+| A-112 | 2026-06-01 | DX回線は帯域1Gbps Private VIFを主とし、VPNバックアップで冗長化する構成を仮定 | Q-112 | @infra-network | ネットワーク設計書／回線調達仕様 |
+| A-113 | 2026-06-01 | バッチ処理の外部通信は全パターン閉域完結（NAT GW不要）を基本と仮定（最終はQ-113回答／要件で確定） | Q-113 | @infra-network, @infra-requirements | ネットワーク設計書／NAT GW要否判定 |
 
 ---
 

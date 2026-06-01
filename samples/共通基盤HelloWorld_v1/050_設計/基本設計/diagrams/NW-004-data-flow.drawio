@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="nw004_flow" name="Data-Flow">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="NW-004 データフロー図 — オンライン2経路（public/private）＋ バッチ3パターン(A/B/C)の閉域API経路" style="text;html=1;align=left;fontSize=13;fontStyle=1;fontColor=#1B3A5C;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1300" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- ===== パブリック経路 ===== -->
+        <mxCell id="lblpub" value="① パブリックサービス経路（住民向け公開）" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor=#1565C0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="500" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="users" value="住民" style="rounded=1;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#1565C0;fillColor=#E3F2FD;" vertex="1" parent="1">
+          <mxGeometry x="40" y="100" width="90" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="cf" value="CloudFront&#10;+ Shield" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudfront;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="180" y="100" width="90" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="waf" value="WAF&#10;(Web ACL)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.waf;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#DD344C;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="100" width="90" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="pubalb" value="公開ALB&#10;(Public Subnet)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="100" width="100" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="fgpub" value="Fargate public&#10;(Private-App)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#ED7100;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="100" width="100" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="e1" value="HTTPS" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="users" target="cf" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="cf" target="waf" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="waf" target="pubalb" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="pubalb" target="fgpub" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- ===== プライベート経路 ===== -->
+        <mxCell id="lblpri" value="② プライベートサービス経路（庁内・職員向け閉域）" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor=#7B1FA2;" vertex="1" parent="1">
+          <mxGeometry x="40" y="210" width="600" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="staff" value="職員/庁内" style="rounded=1;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#7B1FA2;fillColor=#F3E5F5;" vertex="1" parent="1">
+          <mxGeometry x="40" y="240" width="90" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="lgwandx" value="LGWAN→LGCS&#10;→DX(Private VIF)" style="rounded=1;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#E65100;fillColor=#FFE0B2;" vertex="1" parent="1">
+          <mxGeometry x="180" y="240" width="110" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="tgw" value="Transit&#10;Gateway" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.transit_gateway;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="320" y="240" width="90" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="intalb" value="内部ALB&#10;(internal)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="460" y="240" width="100" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="fgpri" value="Fargate private&#10;(Private-App)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#ED7100;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="610" y="240" width="100" height="60" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="p1" value="閉域" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#E65100;strokeWidth=2;endArrow=classic;" edge="1" source="staff" target="lgwandx" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="p2" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#8C4FFF;strokeWidth=2;endArrow=classic;" edge="1" source="lgwandx" target="tgw" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="p3" value="庁内CIDRのみ" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#8C4FFF;strokeWidth=2;endArrow=classic;" edge="1" source="tgw" target="intalb" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="p4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="intalb" target="fgpri" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- ===== 閉域API（共通） ===== -->
+        <mxCell id="lblapi" value="③ 閉域API（VPC Endpoint経由・NAT/IGW非経由）" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor=#3F8624;" vertex="1" parent="1">
+          <mxGeometry x="820" y="70" width="500" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="ep" value="VPC Endpoint&#10;(Protected-Data)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.endpoints;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="820" y="110" width="120" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="s3" value="S3 (CMK)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.simple_storage_service;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#3F8624;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="90" width="80" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="ecr" value="ECR" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_container_registry;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#ED7100;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="90" width="80" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="logs" value="CW Logs" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch_2;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#E7157B;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="160" width="80" height="55" as="geometry"/>
+        </mxCell>
+        <mxCell id="kms" value="KMS" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#DD344C;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="1110" y="160" width="80" height="55" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="a1" value="閉域" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#3F8624;strokeWidth=1.5;endArrow=classic;" edge="1" source="fgpub" target="ep" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a2" value="閉域" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#3F8624;strokeWidth=1.5;endArrow=classic;" edge="1" source="fgpri" target="ep" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a3" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#3F8624;strokeWidth=1.5;endArrow=classic;" edge="1" source="ep" target="s3" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#3F8624;strokeWidth=1.5;endArrow=classic;" edge="1" source="ep" target="ecr" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="a5" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#3F8624;strokeWidth=1.5;endArrow=classic;" edge="1" source="ep" target="logs" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- ===== バッチ3パターン ===== -->
+        <mxCell id="lblbatch" value="④ バッチ/非同期 3パターン（Private-Batch配置・トリガ＝EventBridge/Fargate/S3イベント）" style="text;html=1;align=left;fontSize=12;fontStyle=1;fontColor=#1B3A5C;" vertex="1" parent="1">
+          <mxGeometry x="40" y="360" width="900" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="eb" value="EventBridge&#10;(トリガ)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.eventbridge;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#E7157B;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="40" y="390" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- A -->
+        <mxCell id="ga" value="A: Lambda（最少Endpoint: S3/Logs/SQS(DLQ)/STS。zip前提でECR不要・NATなし）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#ED7100;fillColor=#FFF4EC;verticalAlign=top;align=left;spacingLeft=8;spacingTop=4;container=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="390" width="560" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="lam" value="Lambda (VPC/ENI)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.lambda;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#ED7100;fillColor=#ffffff;rounded=1;" vertex="1" parent="ga">
+          <mxGeometry x="30" y="20" width="110" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="dlqa" value="SQS DLQ" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.simple_queue_service;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#E7157B;fillColor=#ffffff;rounded=1;" vertex="1" parent="ga">
+          <mxGeometry x="200" y="20" width="90" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s3a" value="→ S3(CMK) / Logs（Endpoint経由）" style="text;html=1;align=left;fontSize=9;fontColor=#3F8624;" vertex="1" parent="ga">
+          <mxGeometry x="320" y="30" width="230" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- B -->
+        <mxCell id="gb" value="B: AWS Batch（最多Endpoint: + ECR + Batch。CE/JobQueue/JobDef）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#ED7100;fillColor=#FFF4EC;verticalAlign=top;align=left;spacingLeft=8;spacingTop=4;container=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="490" width="560" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="jq" value="Job Queue" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.batch;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#ED7100;fillColor=#ffffff;rounded=1;" vertex="1" parent="gb">
+          <mxGeometry x="30" y="20" width="90" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="ce" value="Compute Env&#10;(Fargate/EC2)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#ED7100;fillColor=#ffffff;rounded=1;" vertex="1" parent="gb">
+          <mxGeometry x="170" y="20" width="110" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="ecrb" value="ECR pull" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_container_registry;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#ED7100;fillColor=#ffffff;rounded=1;" vertex="1" parent="gb">
+          <mxGeometry x="330" y="20" width="90" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s3b" value="→ S3(CMK)" style="text;html=1;align=left;fontSize=9;fontColor=#3F8624;" vertex="1" parent="gb">
+          <mxGeometry x="440" y="30" width="110" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- C -->
+        <mxCell id="gc" value="C: SQS+ECS Fargate（SQS主＋ECR。キュー深度→CloudWatch→App Auto Scaling）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#ED7100;fillColor=#FFF4EC;verticalAlign=top;align=left;spacingLeft=8;spacingTop=4;container=1;" vertex="1" parent="1">
+          <mxGeometry x="200" y="590" width="560" height="90" as="geometry"/>
+        </mxCell>
+        <mxCell id="sqsc" value="SQS&#10;(CMK)+DLQ" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.simple_queue_service;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#E7157B;fillColor=#ffffff;rounded=1;" vertex="1" parent="gc">
+          <mxGeometry x="30" y="25" width="100" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="wkc" value="Fargate worker&#10;(ポーリング)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#ED7100;fillColor=#ffffff;rounded=1;" vertex="1" parent="gc">
+          <mxGeometry x="180" y="25" width="110" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="asc" value="App Auto Scaling&#10;(キュー深度連動)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch_2;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#E7157B;fillColor=#ffffff;rounded=1;" vertex="1" parent="gc">
+          <mxGeometry x="330" y="25" width="120" height="50" as="geometry"/>
+        </mxCell>
+        <mxCell id="s3c" value="→ S3(CMK)" style="text;html=1;align=left;fontSize=9;fontColor=#3F8624;" vertex="1" parent="gc">
+          <mxGeometry x="470" y="35" width="80" height="30" as="geometry"/>
+        </mxCell>
+
+        <mxCell id="eba" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#E7157B;strokeWidth=1.5;dashed=1;endArrow=classic;" edge="1" source="eb" target="ga" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ebb" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#E7157B;strokeWidth=1.5;dashed=1;endArrow=classic;" edge="1" source="eb" target="gb" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="ebc" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#E7157B;strokeWidth=1.5;dashed=1;endArrow=classic;" edge="1" source="eb" target="gc" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+        <!-- legend -->
+        <mxCell id="legend" value="凡例：紫=ネットワーク/閉域経路 / 緑=閉域API(Endpoint) / オレンジ点線=トリガ / 橙破線(NW-003)=VPNフェイルオーバー。バッチは全パターンNATなし(閉域完結)を基本。" style="rounded=1;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#666666;fillColor=#F5F7FA;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="710" width="1150" height="50" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
