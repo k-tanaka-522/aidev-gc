@@ -6,8 +6,8 @@
 
 set -e
 
-# ログディレクトリの確認・作成
-LOG_DIR="/sessions/adoring-busy-hopper/mnt/aidev-gc/outputs/qa"
+# ログディレクトリの確認・作成（リポジトリルート相対）
+LOG_DIR="${CLAUDE_PROJECT_DIR:-.}/outputs/90_品質管理/90-1_QA"
 mkdir -p "$LOG_DIR"
 
 # ログファイル

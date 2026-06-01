@@ -1,6 +1,12 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "model": "opus",
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash scripts/statusline.sh"
   },
   "permissions": {
     "allow": [
@@ -10,9 +16,14 @@
       "Edit(.claude/**)",
       "Write(outputs/**)",
       "Edit(outputs/**)",
+      "Write(samples/**)",
+      "Edit(samples/**)",
       "Write(scripts/**)",
       "Bash(python scripts/**)",
-      "Bash(bash scripts/**)"
+      "Bash(bash scripts/**)",
+      "Bash(npm run:*)",
+      "Bash(npx cdk:*)",
+      "Bash(cdk synth:*)"
     ]
   },
   "hooks": {
@@ -22,7 +33,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "[ -f outputs/80_PM/01_スケジュール/project_state.yaml ] && echo '=== プロジェクト状態 ===' && cat 'outputs/80_PM/01_スケジュール/project_state.yaml' || echo '[初回セッション: project_state.yaml 未作成]'"
+            "command": "if [ -f outputs/80_PM/01_スケジュール/project_state.yaml ]; then echo '=== プロジェクト状態 ==='; cat 'outputs/80_PM/01_スケジュール/project_state.yaml'; echo '=== QA/課題 ==='; echo \"オープンQA: $(grep -c '未回答' 'outputs/80_PM/02_課題QA管理/QA_LOG.md' 2>/dev/null || echo 0) 件\"; echo \"オープン課題: $(grep -c 'オープン\\|未対応' 'outputs/80_PM/02_課題QA管理/ISSUE_LOG.md' 2>/dev/null || echo 0) 件\"; else echo '[初回セッション: project_state.yaml 未作成]'; fi"
           }
         ]
       }
