@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="gc002_overall" name="Overall-Architecture">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- 住民/利用者 -->
+        <mxCell id="users" value="住民・利用者&#10;(パブリックサービス利用)" style="rounded=1;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#1565C0;fillColor=#E3F2FD;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="140" height="70" as="geometry"/>
+        </mxCell>
+        <!-- インターネット -->
+        <mxCell id="internet" value="インターネット" style="ellipse;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#1565C0;fillColor=#E3F2FD;" vertex="1" parent="1">
+          <mxGeometry x="60" y="240" width="120" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- 職員/庁内 (オンプレ) -->
+        <mxCell id="onprem" value="自治体庁舎(オンプレ)&#10;庁内LAN・職員端末&#10;(プライベートサービス利用)" style="rounded=1;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#7B1FA2;fillColor=#F3E5F5;verticalAlign=top;align=center;container=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="700" width="200" height="200" as="geometry"/>
+        </mxCell>
+        <mxCell id="staffpc" value="職員端末" style="shape=mxgraph.aws4.client;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#7B1FA2;fillColor=#ffffff;" vertex="1" parent="onprem">
+          <mxGeometry x="30" y="50" width="60" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="onpremsrv" value="既存サーバ" style="shape=mxgraph.aws4.traditional_server;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#7B1FA2;fillColor=#ffffff;" vertex="1" parent="onprem">
+          <mxGeometry x="110" y="50" width="60" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- LGWAN -->
+        <mxCell id="lgwan" value="LGWAN網&#10;(閉域)" style="ellipse;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#E65100;fillColor=#FFF3E0;" vertex="1" parent="1">
+          <mxGeometry x="280" y="760" width="130" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- AWS Cloud / GC -->
+        <mxCell id="awscloud" value="ガバメントクラウド (AWS / Organizations メンバーアカウント)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=13;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_aws_cloud;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="460" y="40" width="1140" height="1080" as="geometry"/>
+        </mxCell>
+
+        <!-- CloudFront/WAF (edge) -->
+        <mxCell id="cf" value="CloudFront" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudfront;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="awscloud">
+          <mxGeometry x="40" y="90" width="80" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="waf" value="WAF" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.waf;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="awscloud">
+          <mxGeometry x="40" y="180" width="80" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- VPC (Tenant) -->
+        <mxCell id="vpc" value="テナントVPC (10.20.0.0/16) ※テナント毎にVPC分離" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#AAB7B8;dashed=0;" vertex="1" parent="awscloud">
+          <mxGeometry x="180" y="80" width="700" height="940" as="geometry"/>
+        </mxCell>
+
+        <!-- Public Subnet -->
+        <mxCell id="pubsub" value="Public Subnet (10.20.0.0/24, 10.20.1.0/24)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet_public;strokeColor=#7AA116;fillColor=#E9F3E6;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="vpc">
+          <mxGeometry x="30" y="50" width="620" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="alb_pub" value="ALB (公開)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="pubsub">
+          <mxGeometry x="40" y="50" width="90" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="natgw" value="NAT GW" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.nat_gateway;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="pubsub">
+          <mxGeometry x="480" y="50" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Private Subnet (App) -->
+        <mxCell id="privapp" value="Private Subnet - App (10.20.10.0/24, 10.20.11.0/24)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet_private;strokeColor=#147EBA;fillColor=#EDF3F8;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="vpc">
+          <mxGeometry x="30" y="200" width="620" height="280" as="geometry"/>
+        </mxCell>
+        <mxCell id="fargate_pub" value="ECS Fargate&#10;パブリックサービス&#10;(Spring Boot HelloWorld)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="privapp">
+          <mxGeometry x="40" y="50" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="alb_int" value="内部ALB" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="privapp">
+          <mxGeometry x="250" y="160" width="90" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="fargate_priv" value="ECS Fargate&#10;プライベートサービス&#10;(Spring Boot HelloWorld)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.fargate;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="privapp">
+          <mxGeometry x="440" y="50" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="ecr" value="ECR" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_container_registry;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="privapp">
+          <mxGeometry x="250" y="50" width="90" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Batch/Async Subnet -->
+        <mxCell id="batchsub" value="Private Subnet - Batch/非同期 (10.20.20.0/24) ※比較対象A/B/Cを配置" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet_private;strokeColor=#147EBA;fillColor=#EDF3F8;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="vpc">
+          <mxGeometry x="30" y="500" width="620" height="180" as="geometry"/>
+        </mxCell>
+        <mxCell id="batchbox" value="バッチ/非同期処理&#10;[ A: Lambda / B: AWS Batch / C: SQS+ECS Fargate ]&#10;※詳細は GC-004 比較図参照" style="rounded=1;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#ED7100;fillColor=#FFF3E0;dashed=1;" vertex="1" parent="batchsub">
+          <mxGeometry x="40" y="50" width="540" height="100" as="geometry"/>
+        </mxCell>
+
+        <!-- Protected/Data Subnet -->
+        <mxCell id="datasub" value="Protected Subnet - Data (10.20.30.0/24)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_subnet_private;strokeColor=#147EBA;fillColor=#EDF3F8;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="vpc">
+          <mxGeometry x="30" y="700" width="620" height="120" as="geometry"/>
+        </mxCell>
+        <mxCell id="vpce" value="VPC Endpoint&#10;(S3/ECR/Logs/SQS等)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.endpoints;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="datasub">
+          <mxGeometry x="40" y="40" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="s3" value="S3 (CMK暗号化)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.simple_storage_service;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="datasub">
+          <mxGeometry x="250" y="40" width="100" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="kms" value="KMS CMK" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.key_management_service;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="datasub">
+          <mxGeometry x="430" y="40" width="100" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Shared Services / Governance (right side) -->
+        <mxCell id="shared" value="共有サービス / ガバナンス (Shared Services Folder)" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_account;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="awscloud">
+          <mxGeometry x="910" y="80" width="200" height="940" as="geometry"/>
+        </mxCell>
+        <mxCell id="org" value="Organizations / SCP" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.organizations;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="shared">
+          <mxGeometry x="50" y="40" width="100" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="sso" value="GCAS-SSO (CEP)&#10;IAM Identity Center" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.single_sign_on;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="shared">
+          <mxGeometry x="50" y="140" width="100" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="trail" value="CloudTrail (Org)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudtrail;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="shared">
+          <mxGeometry x="50" y="240" width="100" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="config" value="Config Rules" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.config;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="shared">
+          <mxGeometry x="50" y="340" width="100" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="sechub" value="Security Hub" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.security_hub;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="shared">
+          <mxGeometry x="50" y="440" width="100" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="gd" value="GuardDuty" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.guardduty;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="shared">
+          <mxGeometry x="50" y="540" width="100" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="cw" value="CloudWatch" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.cloudwatch;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="shared">
+          <mxGeometry x="50" y="640" width="100" height="70" as="geometry"/>
+        </mxCell>
+
+        <!-- TGW + DX (connection plane) -->
+        <mxCell id="tgw" value="Transit Gateway" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.transit_gateway;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="awscloud">
+          <mxGeometry x="40" y="760" width="100" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="dx" value="Direct Connect" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.direct_connect;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#232F3E;fillColor=#ffffff;rounded=1;" vertex="1" parent="awscloud">
+          <mxGeometry x="40" y="880" width="100" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e_users_inet" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="users" target="internet" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_inet_cf" value="住民向けWebサービス" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#1565C0;strokeWidth=2;endArrow=classic;" edge="1" source="internet" target="cf" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_cf_waf" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="cf" target="waf" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_waf_alb" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="waf" target="alb_pub" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_alb_fg" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="alb_pub" target="fargate_pub" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_onprem_lgwan" value="庁内業務システム" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#7B1FA2;strokeWidth=2;endArrow=classic;" edge="1" source="onprem" target="lgwan" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_lgwan_dx" value="閉域接続" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#E65100;strokeWidth=2;endArrow=classic;" edge="1" source="lgwan" target="dx" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_dx_tgw" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="dx" target="tgw" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_tgw_vpc" value="プライベートサービス経路" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#147EBA;strokeWidth=2;endArrow=classic;" edge="1" source="tgw" target="alb_int" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_albint_fgpriv" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=2;endArrow=classic;" edge="1" source="alb_int" target="fargate_priv" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_fg_nat" value="アウトバウンド" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=1;endArrow=classic;" edge="1" source="fargate_priv" target="natgw" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+        <mxCell id="e_batch_vpce" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=1.5;dashed=1;endArrow=classic;" edge="1" source="batchbox" target="vpce" parent="1"><mxGeometry relative="1" as="geometry"/></mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

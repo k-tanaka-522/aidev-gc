@@ -6,9 +6,9 @@
 
 set -e
 
-# ドリフト検知のルートディレクトリ
-PROJECT_ROOT="/sessions/adoring-busy-hopper/mnt/aidev-gc"
-OUTPUTS_DIR="$PROJECT_ROOT/outputs/operations"
+# ドリフト検知のルートディレクトリ（リポジトリルート相対）
+PROJECT_ROOT="${CLAUDE_PROJECT_DIR:-.}"
+OUTPUTS_DIR="$PROJECT_ROOT/outputs/07_運用"
 TERRAFORM_DIR="${1:-$PROJECT_ROOT/terraform}"
 
 # 出力ディレクトリの確認・作成

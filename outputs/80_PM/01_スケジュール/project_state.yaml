@@ -1,17 +1,23 @@
-project: ""
-customer: ""
+project: "共同利用ガバメントクラウド Hello World アーキ比較検証（見積サンプル）"
+customer: "（サンプル案件）"
 
-current_phase: "Phase 0"
-phase_entry_date: ""
-completed_phases: []
+current_phase: "Phase 4（設計・見積比較・検証完了 / 条件付きPASS→指摘修正済）"
+phase_entry_date: "2026-06-01"
+completed_phases:
+  - "案件立ち上げ・テーラリング（PROF-001/TAIL-001/WBS-001）"
+  - "基本設計（GC-002/NW-001/SEC-001）"
+  - "詳細設計パラメーターシート（PARAM-001〜007）"
+  - "CDK設計書＋コード（IaC-001, 25ファイル/4,873行）"
+  - "3パターン工数見積比較（EST-001）"
+  - "検証（抜け漏れ検知 88/100・整合性QA 条件付きPASS）＋指摘C-1/H-1/H-2/M-1/M-2修正完了"
 
 last_session:
-  date: ""
-  milestone: ""
+  date: "2026-06-01"
+  milestone: "サンプル一式(基本設計→詳細設計→CDK→見積比較→検証→修正)完了。比較数値を正値(A1/B3/C2・種別C11最多)に統一"
   active_agents: []
 
-next_action: ""
+next_action: "ユーザー報告完了。必要なら定例確認(@review-agent モードA)で残QA一括処理、または成果物のレビュー"
 
-open_qa_count: 0
-open_issue_count: 0
-assumption_pending_count: 0
+open_qa_count: 17
+open_issue_count: 6
+assumption_pending_count: 17

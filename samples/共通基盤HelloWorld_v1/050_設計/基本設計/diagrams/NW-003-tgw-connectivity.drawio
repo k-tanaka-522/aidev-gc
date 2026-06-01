@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" type="device">
+  <diagram id="nw003_tgw" name="TGW-Connectivity">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <mxCell id="title" value="NW-003 TGW接続図 — Hub-and-Spoke（LGWAN/DX/VPNバックアップ ＋ テナントVPC分離）" style="text;html=1;align=left;fontSize=13;fontStyle=1;fontColor=#1B3A5C;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1200" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- オンプレ/庁舎 -->
+        <mxCell id="onprem" value="自治体庁舎(オンプレ)&#10;庁内LAN 192.168.0.0/16&#10;職員端末・既存サーバ" style="rounded=1;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#7B1FA2;fillColor=#F3E5F5;verticalAlign=top;align=center;" vertex="1" parent="1">
+          <mxGeometry x="40" y="120" width="200" height="110" as="geometry"/>
+        </mxCell>
+        <!-- LGWAN -->
+        <mxCell id="lgwan" value="LGWAN網&#10;(閉域・行政専用)" style="ellipse;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#E65100;fillColor=#FFF3E0;" vertex="1" parent="1">
+          <mxGeometry x="60" y="290" width="160" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="lgcs" value="LGCS&#10;(LGWAN Cloud Service)" style="rounded=1;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#E65100;fillColor=#FFE0B2;" vertex="1" parent="1">
+          <mxGeometry x="60" y="420" width="160" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- DX -->
+        <mxCell id="dx" value="DirectConnect&#10;Private VIF 1Gbps&#10;(BGP ASN 64512)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.direct_connect;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="540" width="120" height="80" as="geometry"/>
+        </mxCell>
+        <!-- VPN backup -->
+        <mxCell id="vpn" value="Site-to-Site VPN&#10;(Backup)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.vpn_gateway;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="80" y="660" width="120" height="80" as="geometry"/>
+        </mxCell>
+
+        <!-- Network Hub Account group -->
+        <mxCell id="hub" value="Shared Services OU / Network Hub Account" style="points=[[0,0],[1,0],[1,1],[0,1]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_account;strokeColor=#232F3E;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#232F3E;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="340" y="380" width="420" height="360" as="geometry"/>
+        </mxCell>
+        <mxCell id="dxgw" value="Direct Connect&#10;Gateway" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.direct_connect_gateway;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="hub">
+          <mxGeometry x="40" y="60" width="120" height="70" as="geometry"/>
+        </mxCell>
+        <mxCell id="tgw" value="Transit Gateway&#10;(jp-prd-gc-tgw)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.transit_gateway;html=1;whiteSpace=wrap;fontSize=11;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;fontStyle=1;" vertex="1" parent="hub">
+          <mxGeometry x="150" y="180" width="140" height="100" as="geometry"/>
+        </mxCell>
+        <mxCell id="tgwrt" value="TGW RT分離&#10;・TGW-RT-Tenant（テナント間非伝搬）&#10;・TGW-RT-Shared（庁内/Hub）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#666666;fillColor=#F5F7FA;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;" vertex="1" parent="hub">
+          <mxGeometry x="40" y="290" width="340" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Tenant A VPC -->
+        <mxCell id="vpca" value="テナントA VPC (10.20.0.0/16)" style="points=[[0,0],[1,0],[1,1],[0,1]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#8C4FFF;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="900" y="180" width="340" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="attacha" value="TGW Attachment&#10;(TGW-Attach Subnet)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.transit_gateway_attachment;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="vpca">
+          <mxGeometry x="20" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="albia" value="内部ALB→Fargate(private)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="vpca">
+          <mxGeometry x="180" y="50" width="130" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Tenant B VPC -->
+        <mxCell id="vpcb" value="テナントB VPC (10.21.0.0/16)" style="points=[[0,0],[1,0],[1,1],[0,1]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=11;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;grIcon=mxgraph.aws4.group_vpc;strokeColor=#8C4FFF;fillColor=none;verticalAlign=top;align=left;spacingLeft=30;fontColor=#8C4FFF;dashed=0;" vertex="1" parent="1">
+          <mxGeometry x="900" y="440" width="340" height="220" as="geometry"/>
+        </mxCell>
+        <mxCell id="attachb" value="TGW Attachment&#10;(TGW-Attach Subnet)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.transit_gateway_attachment;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="vpcb">
+          <mxGeometry x="20" y="50" width="120" height="60" as="geometry"/>
+        </mxCell>
+        <mxCell id="albib" value="内部ALB→Fargate(private)" style="shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.elastic_load_balancing;html=1;whiteSpace=wrap;fontSize=9;strokeColor=#8C4FFF;fillColor=#ffffff;rounded=1;" vertex="1" parent="vpcb">
+          <mxGeometry x="180" y="50" width="130" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Tenant N future -->
+        <mxCell id="vpcn" value="テナントN VPC (10.2x.0.0/16) — 将来拡張（Attach1つ追加で疎通）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#8C4FFF;fillColor=#F5F0FF;dashed=1;" vertex="1" parent="1">
+          <mxGeometry x="900" y="700" width="340" height="60" as="geometry"/>
+        </mxCell>
+
+        <!-- Edges -->
+        <mxCell id="e_onprem_lgwan" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#E65100;strokeWidth=2;endArrow=classic;" edge="1" source="onprem" target="lgwan" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_lgwan_lgcs" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#E65100;strokeWidth=2;endArrow=classic;" edge="1" source="lgwan" target="lgcs" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_onprem_dx" value="庁内↔VPC 双方向" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#8C4FFF;strokeWidth=2;endArrow=classic;startArrow=classic;" edge="1" source="onprem" target="dx" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_dx_dxgw" value="Private VIF" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#8C4FFF;strokeWidth=2;endArrow=classic;" edge="1" source="dx" target="dxgw" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_vpn_dxgw" value="フェイルオーバー" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#8C4FFF;strokeWidth=1.5;dashed=1;endArrow=classic;" edge="1" source="vpn" target="tgw" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_lgcs_dxgw" value="LGWAN経路" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#E65100;strokeWidth=2;endArrow=classic;" edge="1" source="lgcs" target="dxgw" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_dxgw_tgw" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#8C4FFF;strokeWidth=2;endArrow=classic;" edge="1" source="dxgw" target="tgw" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_tgw_a" value="Attach (10.20/16)" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#8C4FFF;strokeWidth=2;endArrow=classic;startArrow=classic;" edge="1" source="tgw" target="attacha" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_tgw_b" value="Attach (10.21/16)" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#8C4FFF;strokeWidth=2;endArrow=classic;startArrow=classic;" edge="1" source="tgw" target="attachb" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_a_alb" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=1.5;endArrow=classic;" edge="1" source="attacha" target="albia" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <mxCell id="e_b_alb" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=1;strokeColor=#232F3E;strokeWidth=1.5;endArrow=classic;" edge="1" source="attachb" target="albib" parent="1">
+          <mxGeometry relative="1" as="geometry"/>
+        </mxCell>
+        <!-- tenant isolation note -->
+        <mxCell id="iso" value="テナントA↔B 直接疎通は遮断&#10;（TGW-RT-Tenantで相互CIDR非伝搬）" style="rounded=1;html=1;whiteSpace=wrap;fontSize=10;strokeColor=#DD344C;fillColor=#FDEAEA;align=left;verticalAlign=top;spacingLeft=6;spacingTop=4;" vertex="1" parent="1">
+          <mxGeometry x="900" y="780" width="340" height="50" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
